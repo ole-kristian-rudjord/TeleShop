@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  const allProducts = ref<Product[]>([]);
-
   type SortFunctionType = {
     [key: string]: (a: Product, b: Product) => number;
   };
@@ -21,6 +19,7 @@
   };
 
   const sortOptions = Object.keys(sortFunctions);
+  const allProducts = ref<Product[]>([]);
 
   const sortBy = ref(sortOptions[0]);
   const search = ref('');
@@ -29,31 +28,27 @@
   const priceRange = ref([0, 0]);
   const ratingRange = ref([0, 5]);
 
+  const lowerCaseIncludes = (text: string, search: string) =>
+    text.toLowerCase().includes(search.toLowerCase());
+
   const filteredProducts = computed(() => {
     const selectedCategories = new Set(
       categories.value.filter((c) => c.selected).map((c) => c.name)
     );
 
-    let products = allProducts.value.filter(
-      (product) =>
-        (search.value === '' ||
-          product.title.toLowerCase().includes(search.value.toLowerCase()) ||
-          product.description
-            .toLowerCase()
-            .includes(search.value.toLowerCase())) &&
-        product.price >= priceRange.value[0] &&
-        product.price <= priceRange.value[1] &&
-        product.rating.rate >= ratingRange.value[0] &&
-        product.rating.rate <= ratingRange.value[1] &&
-        selectedCategories.has(product.category)
-    );
-
-    const sortFunction = sortFunctions[sortBy.value];
-    if (sortFunction) {
-      products.sort(sortFunction);
-    }
-
-    return products;
+    return allProducts.value
+      .filter(
+        (product) =>
+          (search.value === '' ||
+            lowerCaseIncludes(product.title, search.value) ||
+            lowerCaseIncludes(product.description, search.value)) &&
+          product.price >= priceRange.value[0] &&
+          product.price <= priceRange.value[1] &&
+          product.rating.rate >= ratingRange.value[0] &&
+          product.rating.rate <= ratingRange.value[1] &&
+          selectedCategories.has(product.category)
+      )
+      .sort(sortFunctions[sortBy.value] ?? ((a, b) => 0));
   });
 
   const handleSelectCategory = (category: string) => {
@@ -74,6 +69,7 @@
     } catch (error) {
       console.error('Error fetching products:', error);
     }
+
     try {
       const categoriesResponse = await getAllCategories();
       if (categoriesResponse) {

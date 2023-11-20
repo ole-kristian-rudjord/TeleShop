@@ -15,7 +15,7 @@
         v-bind="props"
         max-width="400"
         class="pa-4 rounded-xl ma-4 bg-foreground border"
-        :class="isHovering ? 'elevation-4' : 'elevation-1'"
+        :class="isHovering ? 'elevation-4' : 'elevation-0'"
       >
         <div class="d-flex justify-center w-100 pa-4 mb-2 bg-white rounded-xl">
           <v-img :src="product.image" height="200" width="200"></v-img>

@@ -95,6 +95,7 @@
           variant="outlined"
           density="comfortable"
           hide-details
+          color="pink-darken-4"
         ></v-select>
       </v-col>
 
@@ -105,6 +106,7 @@
           variant="outlined"
           density="comfortable"
           hide-details
+          color="pink-darken-4"
         ></v-text-field>
       </v-col>
 
@@ -115,9 +117,11 @@
           :key="index"
           v-model="category.selected"
           :label="category.name"
+          density="comfortable"
           hide-details
           false-icon="fa-regular fa-square"
           true-icon="fa-regular fa-square-check"
+          color="pink-darken-4"
         ></v-checkbox>
       </v-col>
 
@@ -131,6 +135,7 @@
           :max="maxPrice"
           :step="0.01"
           hide-details
+          color="pink-darken-4"
         >
         </v-range-slider>
       </v-col>
@@ -145,6 +150,7 @@
           :max="5"
           :step="0.1"
           hide-details
+          color="pink-darken-4"
         >
         </v-range-slider>
       </v-col>

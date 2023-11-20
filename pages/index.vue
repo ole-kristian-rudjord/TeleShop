@@ -57,6 +57,16 @@
     });
   };
 
+  const resetFilters = () => {
+    sortBy.value = sortOptions[0];
+    search.value = '';
+    categories.value.forEach((category) => {
+      category.selected = true;
+    });
+    priceRange.value = [0, maxPrice.value];
+    ratingRange.value = [0, 5];
+  };
+
   onMounted(async () => {
     try {
       const productsResponse = await getAllProducts();
@@ -86,7 +96,7 @@
 
 <template>
   <v-navigation-drawer width="300">
-    <v-row class="px-6 pt-8">
+    <v-row class="ma-0 pa-4 pt-6">
       <v-col cols="12">
         <v-select
           v-model="sortBy"
@@ -153,6 +163,17 @@
           color="pink-darken-4"
         >
         </v-range-slider>
+      </v-col>
+
+      <v-col cols="12">
+        <v-btn
+          variant="flat"
+          color="pink-darken-4"
+          class="w-100"
+          @click="resetFilters"
+        >
+          Reset
+        </v-btn>
       </v-col>
     </v-row>
   </v-navigation-drawer>

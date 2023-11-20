@@ -3,29 +3,59 @@
 
   const maxPrice = ref(0);
 
+  const search = ref('');
   const priceRange = ref([0, 0]);
   const ratingRange = ref([0, 5]);
   const categories = ref<{ name: string; selected: boolean }[]>([]);
 
+  const filteredProducts = computed(() => {
+    const selectedCategories = new Set(
+      categories.value.filter((c) => c.selected).map((c) => c.name)
+    );
+
+    return allProducts.value.filter(
+      (product) =>
+        (search.value === '' ||
+          product.title.toLowerCase().includes(search.value.toLowerCase()) ||
+          product.description
+            .toLowerCase()
+            .includes(search.value.toLowerCase())) &&
+        product.price >= priceRange.value[0] &&
+        product.price <= priceRange.value[1] &&
+        product.rating.rate >= ratingRange.value[0] &&
+        product.rating.rate <= ratingRange.value[1] &&
+        selectedCategories.has(product.category)
+    );
+  });
+
+  const handleSelectCategory = (category: string) => {
+    categories.value.forEach((c) => {
+      c.selected = c.name === category;
+    });
+  };
+
   onMounted(async () => {
     try {
-      const response = await getAllProducts();
-      if (response) {
-        allProducts.value = response;
+      const productsResponse = await getAllProducts();
+      if (productsResponse) {
+        allProducts.value = productsResponse;
 
         maxPrice.value = Math.max(...allProducts.value.map((p) => p.price));
         priceRange.value = [0, maxPrice.value];
-
-        const uniqueCategories = new Set(
-          allProducts.value.map((product) => product.category)
-        );
-        categories.value = Array.from(uniqueCategories).map((category) => ({
-          name: category,
-          selected: false,
-        }));
       }
     } catch (error) {
       console.error('Error fetching products:', error);
+    }
+    try {
+      const categoriesResponse = await getAllCategories();
+      if (categoriesResponse) {
+        categories.value = categoriesResponse.map((category) => ({
+          name: category,
+          selected: true,
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
     }
   });
 </script>
@@ -33,6 +63,15 @@
 <template>
   <v-navigation-drawer width="300">
     <v-row class="px-6 pt-8">
+      <v-col cols="12">
+        <v-text-field
+          v-model="search"
+          label="Search"
+          variant="outlined"
+          hide-details
+        ></v-text-field>
+      </v-col>
+
       <v-col cols="12">
         <div class="text-body-2">
           Price ({{ priceRange[0] }} - {{ priceRange[1] }})
@@ -66,18 +105,20 @@
         <v-checkbox
           v-for="(category, index) in categories"
           :key="index"
-          :label="category.name"
           v-model="category.selected"
+          :label="category.name"
+          hide-details
+          false-icon="fa-regular fa-square"
+          true-icon="fa-regular fa-square-check"
         ></v-checkbox>
       </v-col>
     </v-row>
   </v-navigation-drawer>
 
   <product-card
-    v-for="(product, index) in allProducts"
+    v-for="(product, index) in filteredProducts"
     :key="index"
     :product="product"
+    @select-category="handleSelectCategory"
   ></product-card>
 </template>
-
-<style scoped lang="scss"></style>

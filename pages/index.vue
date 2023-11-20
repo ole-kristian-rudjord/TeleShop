@@ -1,19 +1,40 @@
 <script setup lang="ts">
   const allProducts = ref<Product[]>([]);
 
-  const maxPrice = ref(0);
+  type SortFunctionType = {
+    [key: string]: (a: Product, b: Product) => number;
+  };
 
+  const sortFunctions: SortFunctionType = {
+    'Title | A-Z': (a: Product, b: Product) => a.title.localeCompare(b.title),
+    'Title | Z-A': (a: Product, b: Product) => b.title.localeCompare(a.title),
+    'Category | A-Z': (a: Product, b: Product) =>
+      a.category.localeCompare(b.category),
+    'Category | Z-A': (a: Product, b: Product) =>
+      b.category.localeCompare(a.category),
+    'Price | low to high': (a: Product, b: Product) => a.price - b.price,
+    'Price | high to low': (a: Product, b: Product) => b.price - a.price,
+    'Rating | low to high': (a: Product, b: Product) =>
+      a.rating.rate - b.rating.rate,
+    'Rating | high to low': (a: Product, b: Product) =>
+      b.rating.rate - a.rating.rate,
+  };
+
+  const sortOptions = Object.keys(sortFunctions);
+
+  const sortBy = ref(sortOptions[0]);
   const search = ref('');
+  const categories = ref<{ name: string; selected: boolean }[]>([]);
+  const maxPrice = ref(0);
   const priceRange = ref([0, 0]);
   const ratingRange = ref([0, 5]);
-  const categories = ref<{ name: string; selected: boolean }[]>([]);
 
   const filteredProducts = computed(() => {
     const selectedCategories = new Set(
       categories.value.filter((c) => c.selected).map((c) => c.name)
     );
 
-    return allProducts.value.filter(
+    let products = allProducts.value.filter(
       (product) =>
         (search.value === '' ||
           product.title.toLowerCase().includes(search.value.toLowerCase()) ||
@@ -26,6 +47,13 @@
         product.rating.rate <= ratingRange.value[1] &&
         selectedCategories.has(product.category)
     );
+
+    const sortFunction = sortFunctions[sortBy.value];
+    if (sortFunction) {
+      products.sort(sortFunction);
+    }
+
+    return products;
   });
 
   const handleSelectCategory = (category: string) => {
@@ -64,12 +92,37 @@
   <v-navigation-drawer width="300">
     <v-row class="px-6 pt-8">
       <v-col cols="12">
+        <v-select
+          v-model="sortBy"
+          label="Sort by"
+          :items="sortOptions"
+          variant="outlined"
+          density="comfortable"
+          hide-details
+        ></v-select>
+      </v-col>
+
+      <v-col cols="12">
         <v-text-field
           v-model="search"
           label="Search"
           variant="outlined"
+          density="comfortable"
           hide-details
         ></v-text-field>
+      </v-col>
+
+      <v-col cols="12">
+        <div class="text-body-2">Categories</div>
+        <v-checkbox
+          v-for="(category, index) in categories"
+          :key="index"
+          v-model="category.selected"
+          :label="category.name"
+          hide-details
+          false-icon="fa-regular fa-square"
+          true-icon="fa-regular fa-square-check"
+        ></v-checkbox>
       </v-col>
 
       <v-col cols="12">
@@ -98,19 +151,6 @@
           hide-details
         >
         </v-range-slider>
-      </v-col>
-
-      <v-col cols="12">
-        <div class="text-body-2">Categories</div>
-        <v-checkbox
-          v-for="(category, index) in categories"
-          :key="index"
-          v-model="category.selected"
-          :label="category.name"
-          hide-details
-          false-icon="fa-regular fa-square"
-          true-icon="fa-regular fa-square-check"
-        ></v-checkbox>
       </v-col>
     </v-row>
   </v-navigation-drawer>

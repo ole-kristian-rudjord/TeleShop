@@ -2,6 +2,10 @@
   defineProps<{
     product: Product;
   }>();
+
+  defineEmits<{
+    (e: 'selectCategory', category: string): void;
+  }>();
 </script>
 
 <template>
@@ -37,6 +41,7 @@
               size="small"
               variant="text"
               class="text-lowercase rounded-pill"
+              @click.prevent="$emit('selectCategory', product.category)"
             >
               {{ product.category }}
             </v-btn>

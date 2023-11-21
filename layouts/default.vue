@@ -19,7 +19,7 @@
         </v-btn>
       </v-app-bar-title>
 
-      <v-btn icon color="pink-darken-4">
+      <v-btn icon color="pink-darken-4" to="/cart" :active="false">
         <v-badge
           v-if="numberOfCartItems > 0"
           :content="numberOfCartItems"

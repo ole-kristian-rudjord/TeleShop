@@ -5,11 +5,11 @@
 <template>
   <v-layout>
     <v-app-bar class="border-b elevation-0">
-      <v-app-bar-title>
+      <v-app-bar-title class="ml-3">
         <v-icon
           icon="fa-solid fa-bag-shopping"
           color="pink-darken-4"
-          class="ml-3 mr-2"
+          class="mr-2"
         ></v-icon>
         <span class="font-weight-bold">TeleShop</span>
       </v-app-bar-title>

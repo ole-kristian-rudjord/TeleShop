@@ -18,11 +18,4 @@ declare global {
     productId: number;
     count: number;
   }
-
-  interface UseCartReturn {
-    cart: Ref<CartItem[]>;
-    addToCart: (productId: number) => void;
-    removeFromCart: (productId: number) => void;
-    numberOfCartItems: ComputedRef<number>;
-  }
 }

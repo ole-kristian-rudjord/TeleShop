@@ -3,7 +3,7 @@
   const cartItems = cart.getCartItems;
   const cartProducts = ref<(Product & { count: number })[]>([]);
 
-  const fetchProductDetails = async () => {
+  const getProductDetails = async () => {
     const productsWithCount: (Product & { count: number })[] = [];
     for (const item of cartItems.value) {
       try {
@@ -16,14 +16,53 @@
     cartProducts.value = productsWithCount;
   };
 
-  watchEffect(() => {
-    fetchProductDetails();
+  const totalCost = computed(() => {
+    return cartProducts.value.reduce(
+      (sum, item) => sum + item.price * item.count,
+      0
+    );
   });
+
+  const decrementProductCount = (productId: number) => {
+    cart.removeFromCart(productId);
+  };
+
+  const incrementProductCount = (productId: number) => {
+    cart.addToCart(productId);
+  };
+
+  const deleteProduct = (productId: number) => {
+    cart.deleteProductFromCart(productId);
+  };
+
+  onMounted(() => {
+    getProductDetails();
+  });
+
+  watch(
+    cartItems,
+    () => {
+      cartItems.value.forEach((cartItem) => {
+        const productIndex = cartProducts.value.findIndex(
+          (p) => p.id === cartItem.productId
+        );
+        if (productIndex !== -1) {
+          cartProducts.value[productIndex].count = cartItem.count;
+        }
+      });
+
+      // Remove any products that are no longer in the cart
+      cartProducts.value = cartProducts.value.filter((p) =>
+        cartItems.value.some((ci) => ci.productId === p.id)
+      );
+    },
+    { deep: true }
+  );
 </script>
 
 <template>
-  <v-card max-width="1250px" class="mx-auto my-12 pa-12 border rounded-xl">
-    <h1>
+  <div style="max-width: 1250px" class="mx-auto my-12 px-4">
+    <h1 class="text-center mb-6">
       <v-icon
         icon="fa-solid fa-cart-shopping"
         size="small"
@@ -36,10 +75,10 @@
         <tr>
           <th></th>
           <th>Name</th>
-          <th>Amount</th>
-          <th>Price</th>
-          <th>Total</th>
-          <th>Remove</th>
+          <th class="text-center">Amount</th>
+          <th class="text-center">Price</th>
+          <th class="text-center">Total</th>
+          <th class="text-center">Remove</th>
         </tr>
       </thead>
       <tbody>
@@ -62,10 +101,11 @@
                 variant="tonal"
                 color="pink-darken-4"
                 :disabled="product.count <= 1"
+                @click="decrementProductCount(product.id)"
               >
                 <v-icon icon="fa-solid fa-minus" size="x-small"></v-icon>
               </v-btn>
-              <div class="mx-1 text-center" style="width: 2ch">
+              <div class="mx-1 text-center" style="width: 3ch">
                 {{ product.count }}
               </div>
               <v-btn
@@ -74,6 +114,7 @@
                 density="comfortable"
                 variant="tonal"
                 color="pink-darken-4"
+                @click="incrementProductCount(product.id)"
               >
                 <v-icon icon="fa-solid fa-plus" size="x-small"></v-icon>
               </v-btn>
@@ -91,13 +132,22 @@
                 density="comfortable"
                 variant="tonal"
                 color="red"
+                @click="deleteProduct(product.id)"
               >
                 <v-icon icon="fa-solid fa-x" size="x-small"></v-icon>
               </v-btn>
             </div>
           </td>
         </tr>
+        <tr class="text-right bg-pink-lighten-5">
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="text-no-wrap">Total price:</td>
+          <td class="font-weight-bold">${{ totalCost.toFixed(2) }}</td>
+          <td></td>
+        </tr>
       </tbody>
     </v-table>
-  </v-card>
+  </div>
 </template>

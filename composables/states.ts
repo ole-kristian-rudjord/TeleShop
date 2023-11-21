@@ -1,53 +1,54 @@
-export const useCart = (): UseCartReturn => {
-  const cart = ref<CartItem[]>([]);
+interface CartState {
+  items: CartItem[];
+}
 
+const cartState = reactive<CartState>({ items: [] });
+
+export const useCart = () => {
   const loadCart = () => {
     if (process.client) {
       const cartString = sessionStorage.getItem('cart');
-      cart.value = cartString ? JSON.parse(cartString) : [];
+      cartState.items = cartString ? JSON.parse(cartString) : [];
     }
   };
 
   const saveCart = () => {
-    sessionStorage.setItem('cart', JSON.stringify(cart.value));
+    if (process.client) {
+      sessionStorage.setItem('cart', JSON.stringify(cartState.items));
+    }
   };
 
   const addToCart = (productId: number) => {
-    const existingProduct = cart.value.find(
+    const existingProduct = cartState.items.find(
       (item) => item.productId === productId
     );
-
     if (existingProduct) {
       existingProduct.count++;
     } else {
-      cart.value.push({ productId, count: 1 });
+      cartState.items.push({ productId, count: 1 });
     }
-
     saveCart();
   };
 
   const removeFromCart = (productId: number) => {
-    const productIndex = cart.value.findIndex(
+    const productIndex = cartState.items.findIndex(
       (item) => item.productId === productId
     );
-
     if (productIndex !== -1) {
-      const product = cart.value[productIndex];
-      if (product.count > 1) {
-        product.count--;
+      if (cartState.items[productIndex].count > 1) {
+        cartState.items[productIndex].count--;
       } else {
-        cart.value.splice(productIndex, 1);
+        cartState.items.splice(productIndex, 1);
       }
+      saveCart();
     }
-
-    saveCart();
   };
 
   const numberOfCartItems = computed(() =>
-    cart.value.reduce((total, item) => total + item.count, 0)
+    cartState.items.reduce((total, item) => total + item.count, 0)
   );
 
   loadCart();
 
-  return { cart, addToCart, removeFromCart, numberOfCartItems };
+  return { addToCart, removeFromCart, numberOfCartItems };
 };

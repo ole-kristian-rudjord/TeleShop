@@ -18,4 +18,8 @@ declare global {
     productId: number;
     count: number;
   }
+
+  interface CartState {
+    items: CartItem[];
+  }
 }

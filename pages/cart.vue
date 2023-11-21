@@ -1,4 +1,8 @@
 <script setup lang="ts">
+  useHead({
+    title: 'My Cart - TeleShop',
+  });
+
   const cart = useCart();
   const cartItems = cart.getCartItems;
   const cartProducts = ref<(Product & { count: number })[]>([]);
@@ -73,7 +77,7 @@
       <thead>
         <tr>
           <th></th>
-          <th>Name</th>
+          <th>Product</th>
           <th class="text-center">Amount</th>
           <th class="text-center">Price</th>
           <th class="text-center">Total</th>

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+  useHead({
+    title: 'Browse Products - TeleShop',
+  });
+
   type SortFunctionType = {
     [key: string]: (a: Product, b: Product) => number;
   };

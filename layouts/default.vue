@@ -1,4 +1,9 @@
 <script setup lang="ts">
+  useHead({
+    title: 'TeleShop',
+    link: [{ rel: 'icon', type: 'image/svg', href: 'teleshop-logo.svg' }],
+  });
+
   const { numberOfCartItems } = useCart();
 </script>
 

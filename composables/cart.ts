@@ -1,7 +1,3 @@
-interface CartState {
-  items: CartItem[];
-}
-
 const cartState = reactive<CartState>({ items: [] });
 
 export const useCart = () => {

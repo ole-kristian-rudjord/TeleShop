@@ -193,12 +193,13 @@
     </v-navigation-drawer>
 
     <div
-      class="d-flex flex-wrap justify-center ga-3 ga-sm-5 px-3 px-sm-5 py-3 py-sm-9"
+      class="w-100 d-flex flex-wrap justify-center ga-3 ga-sm-5 px-3 px-sm-5 py-3 py-sm-9"
     >
       <product-card
         v-for="(product, index) in filteredProducts"
         :key="index"
         :product="product"
+        class="w-100"
         @select-category="handleSelectCategory"
       ></product-card>
     </div>

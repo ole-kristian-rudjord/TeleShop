@@ -51,7 +51,6 @@
         }
       });
 
-      // Remove any products that are no longer in the cart
       cartProducts.value = cartProducts.value.filter((p) =>
         cartItems.value.some((ci) => ci.productId === p.id)
       );
@@ -61,7 +60,7 @@
 </script>
 
 <template>
-  <div style="max-width: 1250px" class="mx-auto my-12 px-4">
+  <div style="max-width: 1250px" class="mx-auto py-12">
     <h1 class="text-center mb-6">
       <v-icon
         icon="fa-solid fa-cart-shopping"
@@ -91,7 +90,24 @@
               class="mx-auto"
             ></v-img>
           </td>
-          <td>{{ product.title }}</td>
+          <td>
+            <v-hover>
+              <template v-slot:default="{ isHovering, props }">
+                <router-link
+                  v-bind="props"
+                  :to="`/product/${product.id}`"
+                  class="text-black"
+                  :class="
+                    isHovering
+                      ? 'text-decoration-underline'
+                      : 'text-decoration-none'
+                  "
+                >
+                  {{ product.title }}
+                </router-link>
+              </template>
+            </v-hover>
+          </td>
           <td>
             <div class="d-flex flex-row justify-center align-center">
               <v-btn
@@ -105,7 +121,7 @@
               >
                 <v-icon icon="fa-solid fa-minus" size="x-small"></v-icon>
               </v-btn>
-              <div class="mx-1 text-center" style="width: 3ch">
+              <div class="mx-1 text-center" style="width: 2ch">
                 {{ product.count }}
               </div>
               <v-btn

@@ -28,6 +28,8 @@
   const priceRange = ref([0, 0]);
   const ratingRange = ref([0, 5]);
 
+  const drawer = ref(true);
+
   const lowerCaseIncludes = (text: string, search: string) =>
     text.toLowerCase().includes(search.toLowerCase());
 
@@ -95,93 +97,111 @@
 </script>
 
 <template>
-  <v-navigation-drawer width="300">
-    <v-row class="ma-0 pa-4 pt-6">
-      <v-col cols="12">
-        <v-select
-          v-model="sortBy"
-          label="Sort by"
-          :items="sortOptions"
-          variant="outlined"
-          density="comfortable"
-          hide-details
-          color="pink-darken-4"
-        ></v-select>
-      </v-col>
+  <div class="d-flex flex-row">
+    <v-navigation-drawer rail permanent>
+      <v-list-item
+        prepend-icon="fa-solid fa-filter"
+        :active="drawer"
+        variant="plain"
+        class="py-4 text-pink-darken-4"
+        @click="drawer = !drawer"
+      >
+      </v-list-item>
+    </v-navigation-drawer>
 
-      <v-col cols="12">
-        <v-text-field
-          v-model="search"
-          label="Search"
-          variant="outlined"
-          density="comfortable"
-          hide-details
-          color="pink-darken-4"
-        ></v-text-field>
-      </v-col>
+    <v-navigation-drawer v-model="drawer" width="300">
+      <v-row class="ma-0 pa-4 pt-6">
+        <v-col cols="12">
+          <v-select
+            v-model="sortBy"
+            label="Sort by"
+            :items="sortOptions"
+            variant="outlined"
+            density="comfortable"
+            hide-details
+            color="pink-darken-4"
+          ></v-select>
+        </v-col>
 
-      <v-col cols="12">
-        <div class="text-body-2">Categories</div>
-        <v-checkbox
-          v-for="(category, index) in categories"
-          :key="index"
-          v-model="category.selected"
-          :label="category.name"
-          density="comfortable"
-          hide-details
-          false-icon="fa-regular fa-square"
-          true-icon="fa-regular fa-square-check"
-          color="pink-darken-4"
-        ></v-checkbox>
-      </v-col>
+        <v-col cols="12">
+          <v-text-field
+            v-model="search"
+            label="Search"
+            variant="outlined"
+            density="comfortable"
+            hide-details
+            color="pink-darken-4"
+          ></v-text-field>
+        </v-col>
 
-      <v-col cols="12">
-        <div class="text-body-2">
-          Price ({{ priceRange[0] }} - {{ priceRange[1] }})
-        </div>
-        <v-range-slider
-          v-model="priceRange"
-          :min="0"
-          :max="maxPrice"
-          :step="0.01"
-          hide-details
-          color="pink-darken-4"
-        >
-        </v-range-slider>
-      </v-col>
+        <v-col cols="12">
+          <div class="text-body-2">Categories</div>
+          <v-checkbox
+            v-for="(category, index) in categories"
+            :key="index"
+            v-model="category.selected"
+            :label="category.name"
+            density="comfortable"
+            hide-details
+            false-icon="fa-regular fa-square"
+            true-icon="fa-regular fa-square-check"
+            color="pink-darken-4"
+          ></v-checkbox>
+        </v-col>
 
-      <v-col cols="12">
-        <div class="text-body-2">
-          Rating ({{ ratingRange[0] }} - {{ ratingRange[1] }})
-        </div>
-        <v-range-slider
-          v-model="ratingRange"
-          :min="0"
-          :max="5"
-          :step="0.1"
-          hide-details
-          color="pink-darken-4"
-        >
-        </v-range-slider>
-      </v-col>
+        <v-col cols="12">
+          <div class="text-body-2">
+            Price ({{ priceRange[0] }} - {{ priceRange[1] }})
+          </div>
+          <v-range-slider
+            v-model="priceRange"
+            :min="0"
+            :max="maxPrice"
+            :step="0.01"
+            hide-details
+            color="pink-darken-4"
+          >
+          </v-range-slider>
+        </v-col>
 
-      <v-col cols="12">
-        <v-btn
-          variant="flat"
-          color="pink-darken-4"
-          class="w-100"
-          @click="resetFilters"
-        >
-          Reset
-        </v-btn>
-      </v-col>
-    </v-row>
-  </v-navigation-drawer>
+        <v-col cols="12">
+          <div class="text-body-2">
+            Rating ({{ ratingRange[0] }} - {{ ratingRange[1] }})
+          </div>
+          <v-range-slider
+            v-model="ratingRange"
+            :min="0"
+            :max="5"
+            :step="0.1"
+            hide-details
+            color="pink-darken-4"
+          >
+          </v-range-slider>
+        </v-col>
 
-  <product-card
-    v-for="(product, index) in filteredProducts"
-    :key="index"
-    :product="product"
-    @select-category="handleSelectCategory"
-  ></product-card>
+        <v-col cols="12">
+          <v-btn
+            variant="flat"
+            color="pink-darken-4"
+            class="w-100"
+            @click="resetFilters"
+          >
+            Reset
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-navigation-drawer>
+
+    <div
+      class="d-flex flex-wrap justify-center ga-3 ga-sm-5 px-3 px-sm-5 py-3 py-sm-9"
+    >
+      <product-card
+        v-for="(product, index) in filteredProducts"
+        :key="index"
+        :product="product"
+        @select-category="handleSelectCategory"
+        class="w-100 bg-red"
+      ></product-card>
+    </div>
+  </div>
 </template>

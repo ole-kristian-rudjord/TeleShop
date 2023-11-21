@@ -20,9 +20,15 @@
       </v-app-bar-title>
 
       <v-btn icon color="pink-darken-4">
-        <v-badge :content="numberOfCartItems" floating location="bottom start">
+        <v-badge
+          v-if="numberOfCartItems > 0"
+          :content="numberOfCartItems"
+          floating
+          location="bottom start"
+        >
           <v-icon icon="fa-solid fa-cart-shopping"></v-icon>
         </v-badge>
+        <v-icon v-else icon="fa-solid fa-cart-shopping"></v-icon>
       </v-btn>
     </v-app-bar>
 

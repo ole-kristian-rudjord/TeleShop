@@ -18,6 +18,8 @@ export const useCart = () => {
     }
   };
 
+  const getCartItems = computed(() => cartState.items);
+
   const addToCart = (productId: number) => {
     const existingProduct = cartState.items.find(
       (item) => item.productId === productId
@@ -44,11 +46,27 @@ export const useCart = () => {
     }
   };
 
+  const deleteProductFromCart = (productId: number) => {
+    const productIndex = cartState.items.findIndex(
+      (item) => item.productId === productId
+    );
+    if (productIndex !== -1) {
+      cartState.items.splice(productIndex, 1);
+      saveCart();
+    }
+  };
+
   const numberOfCartItems = computed(() =>
     cartState.items.reduce((total, item) => total + item.count, 0)
   );
 
   loadCart();
 
-  return { addToCart, removeFromCart, numberOfCartItems };
+  return {
+    getCartItems,
+    addToCart,
+    removeFromCart,
+    deleteProductFromCart,
+    numberOfCartItems,
+  };
 };

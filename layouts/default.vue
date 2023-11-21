@@ -5,13 +5,18 @@
 <template>
   <v-layout>
     <v-app-bar class="border-b elevation-0">
-      <v-app-bar-title class="ml-3">
-        <v-icon
-          icon="fa-solid fa-bag-shopping"
-          color="pink-darken-4"
-          class="mr-2"
-        ></v-icon>
-        <span class="font-weight-bold">TeleShop</span>
+      <v-app-bar-title class="ma-0">
+        <v-btn size="x-large" to="/" :active="false" class="h-100 pa-5">
+          <template v-slot:prepend>
+            <v-icon
+              icon="fa-solid fa-bag-shopping"
+              size="x-large"
+              color="pink-darken-4"
+              class="mr-2"
+            ></v-icon>
+          </template>
+          <span class="text-h6 font-weight-bold">TeleShop</span>
+        </v-btn>
       </v-app-bar-title>
 
       <v-btn icon color="pink-darken-4">

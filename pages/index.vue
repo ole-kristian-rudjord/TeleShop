@@ -200,7 +200,6 @@
         :key="index"
         :product="product"
         @select-category="handleSelectCategory"
-        class="w-100 bg-red"
       ></product-card>
     </div>
   </div>

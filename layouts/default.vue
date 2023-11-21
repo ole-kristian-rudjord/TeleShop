@@ -1,30 +1,4 @@
 <script setup lang="ts">
-  // const numberOfCartItems = ref(0);
-
-  // const updateCartItemCount = () => {
-  //   const cartString = sessionStorage.getItem('cartItems');
-  //   const cart: CartItem[] = cartString ? JSON.parse(cartString) : [];
-  //   numberOfCartItems.value = cart.reduce(
-  //     (total, item) => total + item.count,
-  //     0
-  //   );
-  // };
-
-  // const handleStorageChange = (event: StorageEvent) => {
-  //   if (event.key === 'cartItems') {
-  //     updateCartItemCount();
-  //   }
-  // };
-
-  // onMounted(() => {
-  //   window.addEventListener('storage', handleStorageChange);
-  //   updateCartItemCount();
-  // });
-
-  // onUnmounted(() => {
-  //   window.removeEventListener('storage', handleStorageChange);
-  // });
-
   const { numberOfCartItems } = useCart();
 </script>
 

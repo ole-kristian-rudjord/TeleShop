@@ -14,11 +14,11 @@
       <v-card
         v-bind="props"
         max-width="400"
-        class="pa-4 rounded-xl ma-4 bg-foreground border"
+        class="pa-4 rounded-xl bg-foreground border"
         :class="isHovering ? 'elevation-4' : 'elevation-0'"
       >
         <div class="d-flex justify-center w-100 pa-4 mb-2 bg-white rounded-xl">
-          <v-img :src="product.image" height="200" width="200"></v-img>
+          <v-img :src="product.image" height="190" width="190"></v-img>
         </div>
         <v-card-item class="py-0">
           <v-card-title class="pb-1">{{ product.title }}</v-card-title>

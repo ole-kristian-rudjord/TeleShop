@@ -28,7 +28,7 @@
   const priceRange = ref([0, 0]);
   const ratingRange = ref([0, 5]);
 
-  const drawer = ref(true);
+  const drawer = ref(false);
 
   const lowerCaseIncludes = (text: string, search: string) =>
     text.toLowerCase().includes(search.toLowerCase());

@@ -1,5 +1,9 @@
 <script setup lang="ts">
-  const route = useRoute();
+  const title = ref('TeleShop');
+
+  useHead({
+    title: title,
+  });
 
   const product = ref<Product | null>(null);
 
@@ -10,7 +14,7 @@
   };
 
   onMounted(async () => {
-    const productId = Number(route.params.id);
+    const productId = Number(useRoute().params.id);
 
     if (!isNaN(productId)) {
       try {
@@ -25,6 +29,16 @@
       console.error('Product-id could not be converted to a number');
     }
   });
+
+  watch(
+    product,
+    (newValue) => {
+      if (newValue?.title) {
+        title.value = `${newValue.title} - TeleShop`;
+      }
+    },
+    { immediate: true }
+  );
 </script>
 
 <template>

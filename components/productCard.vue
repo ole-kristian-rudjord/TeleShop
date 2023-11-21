@@ -14,9 +14,9 @@
 
 <template>
   <v-card
+    :to="`/product/${product.id}`"
     max-width="400"
     class="pa-4 rounded-xl border"
-    :to="`/product/${product.id}`"
   >
     <div class="d-flex justify-center w-100 pa-4 mb-2 bg-white rounded-xl">
       <v-img :src="product.image" height="190" width="190"></v-img>

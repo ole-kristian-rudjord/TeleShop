@@ -1,6 +1,4 @@
-# Nuxt 3 Minimal Starter
-
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+# TeleShop
 
 ## Setup
 
@@ -38,38 +36,15 @@ yarn dev
 bun run dev
 ```
 
-## Production
+## Technologies Used
 
-Build the application for production:
+- TypeScript
+- Vue 3 (with Composition API)
+- Nuxt 3
+- Vuetify 3
+- Sass
+- Font Awesome
 
-```bash
-# npm
-npm run build
+## API Used
 
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+- fakestoreapi.com
